@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Алексей Локтев](https://up.htmlacademy.ru/ecmascript/11/user/129863).
-* Наставник: `Неизвестно`.
+* Наставник: `Без наставника`.
 
 ---
 
