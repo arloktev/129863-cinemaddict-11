@@ -1,4 +1,4 @@
-export const createFilmsContainerMarkup = () => {
+export const createFilmsContainerTemplate = () => {
   return `
     <section class="films">
       <section class="films-list">
