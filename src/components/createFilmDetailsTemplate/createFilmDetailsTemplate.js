@@ -1,11 +1,13 @@
-export const createFilmDetailsTemplate = (film) => {
-  const {name, originalName, image, description, rating, ageRating, director, writers, actors, releaseDate, runtime, country, comments, genres} = film;
+import {createElement} from "../../utils/render";
 
-  const generateGenreMarkup = (genresFilm) => {
-    return genresFilm.map((genre) => {
-      return `<span class="film-details__genre">${genre}</span>`;
-    });
-  };
+const generateGenreMarkup = (genresFilm) => {
+  return genresFilm.map((genre) => {
+    return `<span class="film-details__genre">${genre}</span>`;
+  });
+};
+
+const createFilmDetailsTemplate = (film) => {
+  const {name, originalName, image, description, rating, ageRating, director, writers, actors, releaseDate, runtime, country, comments, genres} = film;
 
   return `
     <section class="film-details">
@@ -176,3 +178,26 @@ export const createFilmDetailsTemplate = (film) => {
     </section>
   `;
 };
+
+export default class FilmDetails {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

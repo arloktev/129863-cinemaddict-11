@@ -1,3 +1,5 @@
+import {createElement} from "../../utils/render";
+
 const createMenuMarkup = (menu, isActive) => {
   const {name, link, count} = menu;
 
@@ -12,7 +14,7 @@ const createMenuMarkup = (menu, isActive) => {
   );
 };
 
-export const createMenuTemplate = (menus) => {
+const createMenuTemplate = (menus) => {
   const menusMarkup = menus.map((menu, index) => createMenuMarkup(menu, index === 0)).join(`\n`);
 
   return `
@@ -24,3 +26,27 @@ export const createMenuTemplate = (menus) => {
     </nav>
   `;
 };
+
+export default class Menu {
+  constructor(menus) {
+    this._menus = menus;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMenuTemplate(this._menus);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

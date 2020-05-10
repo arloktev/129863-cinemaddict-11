@@ -1,3 +1,5 @@
+import {createElement} from "../../utils/render";
+
 const createFilmCardControlsMarkup = () => {
   return `
     <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
@@ -6,7 +8,7 @@ const createFilmCardControlsMarkup = () => {
   `;
 };
 
-export const createFilmCardTemplate = (film) => {
+const createFilmCardTemplate = (film) => {
   const {poster, name, rating, year, duration, genres, shortDescription, comments} = film;
 
   const filmCardControlsMarkup = createFilmCardControlsMarkup();
@@ -29,3 +31,27 @@ export const createFilmCardTemplate = (film) => {
     </article>
   `;
 };
+
+export default class Film {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
