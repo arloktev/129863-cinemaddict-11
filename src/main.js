@@ -7,6 +7,7 @@ import MostCommentedContainer from './components/createMostCommentedContainerTem
 import Film from './components/createFilmCardTemplate/createFilmCardTemplate';
 import LoadMoreButton from './components/createLoadMoreButtonTemplate/createLoadMoreButtonTemplate';
 import FilmDetails from './components/createFilmDetailsTemplate/createFilmDetailsTemplate';
+import NoFilms from './components/no-films/no-films';
 import {generateFilm} from './mock/film';
 import {generateMenus} from './mock/menu';
 import {RenderPosition, renderElement} from './utils/render';
@@ -20,9 +21,6 @@ const mainElement = document.querySelector(`.main`);
 renderElement(headerElement, new Profile().getElement(), RenderPosition.APPEND);
 renderElement(mainElement, new Menu(generateMenus()).getElement(), RenderPosition.APPEND);
 renderElement(mainElement, new Filter(sortNames).getElement(), RenderPosition.APPEND);
-renderElement(mainElement, new FilmsContainer().getElement(), RenderPosition.APPEND);
-
-const filmsListContainer = document.querySelector(`.films-list__container`);
 
 const films = [];
 const COUNT_FILMS = 20;
@@ -73,38 +71,50 @@ const renderFilm = (container, film) => {
   renderElement(container, filmComponent.getElement(), RenderPosition.APPEND);
 };
 
-let showingFilmsCount = COUNT_SHOWING_FILMS_ON_START;
+const renderFilms = () => {
+  renderElement(mainElement, new FilmsContainer().getElement(), RenderPosition.APPEND);
 
-films.slice(0, showingFilmsCount).forEach((film) => {
-  renderFilm(filmsListContainer, film, RenderPosition.APPEND);
-});
+  const filmsListContainer = document.querySelector(`.films-list__container`);
 
-const loadMoreButtonComponent = new LoadMoreButton();
+  let showingFilmsCount = COUNT_SHOWING_FILMS_ON_START;
 
-renderElement(filmsListContainer, loadMoreButtonComponent.getElement(), RenderPosition.AFTER);
-
-loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
-  const prevFilmsCount = showingFilmsCount;
-  showingFilmsCount = showingFilmsCount + COUNT_SHOWING_FILMS_ON_BUTTON;
-
-  films.slice(prevFilmsCount, showingFilmsCount).forEach((film) => {
+  films.slice(0, showingFilmsCount).forEach((film) => {
     renderFilm(filmsListContainer, film, RenderPosition.APPEND);
   });
 
-  if (showingFilmsCount >= films.length) {
-    loadMoreButtonComponent.getElement().remove();
+  const loadMoreButtonComponent = new LoadMoreButton();
+
+  renderElement(filmsListContainer, loadMoreButtonComponent.getElement(), RenderPosition.AFTER);
+
+  loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
+    const prevFilmsCount = showingFilmsCount;
+    showingFilmsCount = showingFilmsCount + COUNT_SHOWING_FILMS_ON_BUTTON;
+
+    films.slice(prevFilmsCount, showingFilmsCount).forEach((film) => {
+      renderFilm(filmsListContainer, film, RenderPosition.APPEND);
+    });
+
+    if (showingFilmsCount >= films.length) {
+      loadMoreButtonComponent.getElement().remove();
+    }
+  });
+
+  const filmsList = document.querySelector(`.films-list`);
+
+  renderElement(filmsList, new TopRatedContainer().getElement(), RenderPosition.AFTER);
+  renderElement(filmsList, new MostCommentedContainer().getElement(), RenderPosition.AFTER);
+
+  const filmsListTopRatedContainer = document.querySelectorAll(`.films-list--extra .films-list__container`);
+
+  for (let i = 0; i < 2; i++) {
+    renderFilm(filmsListTopRatedContainer[0], films[i], RenderPosition.APPEND);
+    renderFilm(filmsListTopRatedContainer[1], films[i], RenderPosition.APPEND);
   }
-});
+};
 
-const filmsList = document.querySelector(`.films-list`);
-
-renderElement(filmsList, new TopRatedContainer().getElement(), RenderPosition.AFTER);
-renderElement(filmsList, new MostCommentedContainer().getElement(), RenderPosition.AFTER);
-
-const filmsListTopRatedContainer = document.querySelectorAll(`.films-list--extra .films-list__container`);
-
-for (let i = 0; i < 2; i++) {
-  renderFilm(filmsListTopRatedContainer[0], films[i], RenderPosition.APPEND);
-  renderFilm(filmsListTopRatedContainer[1], films[i], RenderPosition.APPEND);
+if (films.length) {
+  renderFilms();
+} else {
+  renderElement(mainElement, new NoFilms().getElement(), RenderPosition.APPEND);
 }
 
