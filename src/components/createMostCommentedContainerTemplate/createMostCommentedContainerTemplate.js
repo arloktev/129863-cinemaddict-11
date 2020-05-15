@@ -1,4 +1,4 @@
-import {createElement} from "../../utils/render";
+import AbstractComponent from "../abstract-component/abstract-component";
 
 const createMostCommentedContainerTemplate = () => {
   return `
@@ -10,24 +10,8 @@ const createMostCommentedContainerTemplate = () => {
   `;
 };
 
-export default class MostCommentedContainer {
-  constructor() {
-    this._element = null;
-  }
-
+export default class MostCommentedContainer extends AbstractComponent {
   getTemplate() {
     return createMostCommentedContainerTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
