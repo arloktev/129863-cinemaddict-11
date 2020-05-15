@@ -1,4 +1,4 @@
-import {createElement} from "../../utils/render";
+import AbstractComponent from "../abstract-component/abstract-component";
 
 const createFilterMarkup = (name, isActive) => {
   return `<li><a href="#" class="sort__button ${isActive ? `sort__button--active` : ``}">${name}</a></li>`;
@@ -14,26 +14,14 @@ const createFilterTemplate = (filters) => {
   `;
 };
 
-export default class Filter {
+export default class Filter extends AbstractComponent {
   constructor(filters) {
-    this._filters = filters;
+    super();
 
-    this._element = null;
+    this._filters = filters;
   }
 
   getTemplate() {
     return createFilterTemplate(this._filters);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

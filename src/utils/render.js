@@ -12,7 +12,9 @@ export const createElement = (str) => {
   return template.content.firstChild;
 };
 
-export const renderElement = (container, element, position) => {
+export const renderComponent = (container, component, position) => {
+  const element = component.getElement();
+
   switch (position) {
     case RenderPosition.APPEND:
       container.append(element);
@@ -27,4 +29,9 @@ export const renderElement = (container, element, position) => {
       container.after(element);
       break;
   }
-}
+};
+
+export const removeComponent = (component) => {
+  component.getElement().remove();
+  component.removeElement();
+};
